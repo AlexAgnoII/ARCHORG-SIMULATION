@@ -72,6 +72,11 @@ public class BinaryToDecimal {
 		else if (exponent > 0) {
 			pos = (exponent + 2) - 1; //-1 for index.
 			
+			if(pos > 23) {
+				addMoreZeroes(pos);
+			}
+			
+			
 			if(cArr[pos] == '0') {
 				cArr[pos] = 'Z';
 			}
@@ -85,7 +90,7 @@ public class BinaryToDecimal {
 					if(cArr[i] == 'Z')
 						newMantissa+= "0.";
 					else
-						newMantissa+= ("1.");
+						newMantissa+="1.";
 				}
 
 				else {
@@ -105,6 +110,18 @@ public class BinaryToDecimal {
 		
 	}
 	
+	//adds trailing zeroes.
+	private void addMoreZeroes(int pos) {
+		// TODO Auto-generated method stub
+		int ctr = 0;
+		while(ctr < pos) {
+			mantissa+="0";
+			ctr++;
+		}
+		
+	}
+
+
 	//converts the given binary number into decimal.
 	private void convertBinaryToDecimal(String newMantissa) {
 		String[] value;
