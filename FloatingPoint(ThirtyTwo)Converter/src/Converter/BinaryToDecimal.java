@@ -16,12 +16,15 @@ public class BinaryToDecimal {
 	
 	private String answer;
 	
+	private int specialCase;
+	
 	
 	public BinaryToDecimal() {
 		this.signBit = "";
 		this.exponentBits = "";
 		this.mantissaBits = "";
 		this.mantissa = "1.";
+		this.specialCase = 0;
 	}
 	
 
@@ -45,7 +48,7 @@ public class BinaryToDecimal {
 		calculateMantissaValue();
 		
 		//caluclate decimal/special value;
-		if(true) {
+		if(checkForSpecialCase()) {
 			calculateDeciamlorSpecial();
 		}
 		
@@ -54,9 +57,24 @@ public class BinaryToDecimal {
 		}
 
 
+		
+		//Checck if negative or positive.
+		if(signBit.equals("1")) {
+			answer = "-" + answer;
+		}
 		return answer;
 	}
 	
+	private boolean checkForSpecialCase() {
+		// TODO Auto-generated method stub
+		
+		if(exponentBits.matches("[0]+")) {
+			
+		}
+		return false;
+	}
+
+
 	private void calculateDeciamlorSpecial() {
 		int pos = 0;
 		char cArr[];
@@ -162,11 +180,6 @@ public class BinaryToDecimal {
 			answer += right;
 		}
 
-		
-		//Checck if negative or positive.
-		if(signBit.equals("1")) {
-			answer = "-" + answer;
-		}
 		
 		this.answer = answer;
 	}
