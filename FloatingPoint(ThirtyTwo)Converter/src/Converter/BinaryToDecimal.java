@@ -59,7 +59,7 @@ public class BinaryToDecimal {
 	
 	private void calculateDeciamlorSpecial() {
 		int pos = 0;
-		char cArr[] = mantissa.toCharArray();;
+		char cArr[];
 		String newMantissa = "";
 		
 		
@@ -75,6 +75,8 @@ public class BinaryToDecimal {
 			if(pos > 23) {
 				addMoreZeroes(pos);
 			}
+			
+			cArr = mantissa.toCharArray();
 			
 			
 			if(cArr[pos] == '0') {
@@ -118,6 +120,8 @@ public class BinaryToDecimal {
 			mantissa+="0";
 			ctr++;
 		}
+		System.out.println("New Mantissa size: " + mantissa.length());
+		System.out.println("Mantissa: " + mantissa);
 		
 	}
 
