@@ -18,6 +18,11 @@ public class BinaryToDecimal {
 	
 	private int specialCase;
 	
+	private boolean infinity,
+	                zero,
+	                sNaN,
+	                qNaN;
+	
 	
 	public BinaryToDecimal() {
 		this.signBit = "";
@@ -25,6 +30,11 @@ public class BinaryToDecimal {
 		this.mantissaBits = "";
 		this.mantissa = "1.";
 		this.specialCase = 0;
+		
+		this.infinity = false;
+		this.zero = false;
+		this.sNaN = false;
+		this.qNaN = false;
 	}
 	
 
@@ -48,18 +58,55 @@ public class BinaryToDecimal {
 		calculateMantissaValue();
 		
 		//caluclate decimal/special value;
-		if(checkForSpecialCase()) {
-			calculateDeciamlorSpecial();
+		if(!checkForSpecialCase()) {
+			try {
+				calculateDeciamlorSpecial();
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+				System.out.println("\n\n\n");
+				System.out.println("Number too big!");
+				System.out.println("Mantissa: " + mantissa);
+				System.out.println("Exponent: " + exponent);
+				answer="Too big!";
+			}
+			
 		}
 		
 		else {
 			//Special case.
+			if(infinity) {
+				System.out.println("infinity!");
+				answer="Infinity";
+			}
+			
+			else if(zero) {
+				System.out.println("Zero!");
+				answer="0";
+			}
+			
+			else if(sNaN) {
+				System.out.println("sNaN");
+				answer="sNaN";
+			}
+			
+			else if(qNaN) {
+				System.out.println("qNaN");
+				answer="qNaN";
+			}
+			
+			else {
+				System.out.println("Special error.");
+			}
 		}
 
 
 		
 		//Checck if negative or positive.
-		if(signBit.equals("1")) {
+		if(signBit.equals("1") && 
+		   !answer.equals("Too big!") &&
+		   !sNaN &&
+		   !qNaN) {
 			answer = "-" + answer;
 		}
 		return answer;
@@ -67,11 +114,39 @@ public class BinaryToDecimal {
 	
 	private boolean checkForSpecialCase() {
 		// TODO Auto-generated method stub
+		boolean flag = false;
 		
-		if(exponentBits.matches("[0]+")) {
-			
+		//Infinity
+		if(exponentBits.matches("[1]+") &&
+		   mantissaBits.matches("[0]+")) {
+			infinity = true;
+			flag = true;
 		}
-		return false;
+		
+		//Zero
+		else if(exponentBits.matches("[0]+") &&
+				mantissaBits.matches("[0]+")) {
+			zero = true;
+			flag = true;
+		}
+		
+		//sNan
+		else if(exponentBits.matches("[1]+") &&
+				mantissaBits.charAt(0) == '0' &&
+				!mantissaBits.substring(1).matches("[0]+")) {
+			sNaN = true;
+			flag = true;
+		}
+		
+		//qNaN
+		else if(exponentBits.matches("[1]+") &&
+				mantissaBits.charAt(0) == '1' &&
+				!mantissaBits.substring(1).matches("[0]+")) {
+			qNaN = true;
+			flag = true;
+		}
+		
+		return flag;
 	}
 
 
@@ -125,7 +200,24 @@ public class BinaryToDecimal {
 		
 		//Negative, move decimal to the left
 		else {
+			String negMantissa = "";
+			int max = Math.abs(exponent);
+			int ctr = 0;
 			
+			//add zero to head of mantissa.
+			while(ctr < max) {
+				
+				if(ctr == 0) 
+					negMantissa = "1" + mantissaBits;
+				else {
+					negMantissa = "0" + negMantissa;
+				}
+				
+				ctr++;
+			}
+			negMantissa = "0." + negMantissa;
+			System.out.println("Negative mantissa (exponent applied): " + negMantissa);
+			convertBinaryToDecimal(negMantissa);
 		}
 		
 	}
@@ -195,7 +287,7 @@ public class BinaryToDecimal {
 		while(index < value.length()) {
 			//Convert the 
 			num = Integer.parseInt(value.charAt(index)+"");
-			System.out.println(num);
+			//System.out.println(num);
 			
 			if(num != 0) {
 				//sum += (1.0 * num) / mult;

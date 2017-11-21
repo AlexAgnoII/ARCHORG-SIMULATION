@@ -19,6 +19,7 @@ public abstract class Converter {
 	
 	
 	public void displayResult(){
+		System.out.println("\n\n\n");
 		System.out.println("Resulting decimal: " + result);
 	}
 	
